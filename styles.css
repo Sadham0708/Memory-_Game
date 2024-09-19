@@ -1,0 +1,97 @@
+body {
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background: #000; /* Black background */
+}
+
+.game-board {
+    display: grid;
+    grid-template-columns: repeat(6, 120px); /* Adjusted number of columns */
+    grid-gap: 15px;
+    justify-content: center;
+}
+
+.card {
+    width: 120px;
+    height: 120px;
+    background: #fff; /* White background for the cards */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2.5rem; /* Larger font size */
+    color: #333; /* Dark gray for text */
+    cursor: pointer;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Slightly darker shadow */
+    transition: transform 0.6s, background 0.3s, box-shadow 0.3s;
+    position: relative;
+    perspective: 1000px; /* Added for 3D flipping effect */
+}
+
+.card.flipped,
+.card.correct {
+    transform: rotateY(180deg); /* Rotate card when flipped or correctly matched */
+}
+
+.card.correct {
+    background: #444; /* Slightly lighter gray for correct matches */
+    color: #fff; /* White text for correct matches */
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
+    transform: rotateY(360deg); /* Full rotation for correct matches */
+}
+
+.card.incorrect {
+    background: #222; /* Darker gray for incorrect matches */
+    color: #fff; /* White text for incorrect matches */
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
+    transform: scale(1.1); /* Slightly larger scaling for incorrect matches */
+}
+
+/* Card Front and Back */
+.card-inner {
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d; /* Preserve 3D effect */
+}
+
+.card .card-front,
+.card .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+    backface-visibility: hidden; /* Hide back face when showing front */
+}
+
+.card .card-front {
+    background: #fff; /* White front */
+}
+
+.card .card-back {
+    background: #333; /* Dark gray back */
+    color: #fff; /* White text on back */
+    transform: rotateY(180deg); /* Rotate back face to be hidden initially */
+}
+
+/* Hover Effect for Default Cards */
+.card:hover {
+    background: #e0e0e0; /* Light gray for hover effect */
+    transform: scale(1.05); /* Slightly larger scaling effect */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+}
+
+.card.flipped img,
+.card.correct img {
+    opacity: 1; /* Ensure images are visible */
+}
+
+.card:not(.flipped) img {
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
