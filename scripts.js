@@ -4,6 +4,15 @@ const startBtn = document.getElementById('startBtn');
 const toggleBtn = document.getElementById('toggleBtn');
 const tryAgainBtn = document.getElementById('tryAgainBtn');
 
+// Create a message container
+const messageContainer = document.createElement('div');
+document.body.appendChild(messageContainer); // Add message container to the body
+messageContainer.style.textAlign = 'center'; // Center align the message container
+messageContainer.classList.add('hidden'); // Initially hide the message container
+messageContainer.style.color = 'white'; // Set text color for visibility
+messageContainer.style.fontSize = '1.5rem'; // Set font size
+messageContainer.style.marginBottom = '20px'; // Space below the message
+
 const cardValues = ['🍎', '🍊', '🍋', '🍉', '🍇', '🍓', '🍒', '🍍', '🥭', '🍑', '🍌', '🍐', '🍎', '🍊', '🍋', '🍉', '🍇', '🍓', '🍒', '🍍', '🥭', '🍑', '🍌', '🍐'];
 let cards = [];
 let firstCard, secondCard;
@@ -12,6 +21,7 @@ let timeLeft = 180; // Timer set to 3 minutes (180 seconds)
 let timer;
 let gameStarted = false;
 let isPaused = false;
+let matchedPairs = 0; // Track the number of matched pairs
 
 function createCard(value) {
     const card = document.createElement('div');
@@ -60,6 +70,14 @@ function checkForMatch() {
     if (isMatch) {
         firstCard.classList.add('correct');
         secondCard.classList.add('correct');
+        matchedPairs++; // Increment matched pairs
+
+        // Check if all pairs are matched
+        if (matchedPairs === cardValues.length / 2) {
+            clearInterval(timer);
+            showMessage("Congratulations! You've finished the game!"); // Show custom message
+        }
+
         resetBoard();
     } else {
         lockBoard = true;
@@ -69,6 +87,12 @@ function checkForMatch() {
             resetBoard();
         }, 1000);
     }
+}
+
+function showMessage(message) {
+    messageContainer.textContent = message; // Set the message text
+    tryAgainBtn.classList.remove('hidden'); // Show the Try Again button
+    messageContainer.classList.remove('hidden'); // Show the message container
 }
 
 function resetBoard() {
@@ -83,8 +107,7 @@ function startTimer() {
 
         if (timeLeft === 0) {
             clearInterval(timer);
-            alert("Time's up!");
-            tryAgainBtn.classList.remove('hidden');
+            showMessage("Time's up!");
         }
     }, 1000);
 }
@@ -118,12 +141,14 @@ function resetGame() {
     lockBoard = false;
     timeLeft = 180; // Reset time to 3 minutes
     timerElement.textContent = timeLeft; // Update timer display
+    matchedPairs = 0; // Reset matched pairs count
 
     // Set up a new game board
     setupBoard();
 
     // Reset button visibility
     tryAgainBtn.classList.add('hidden'); // Hide Try Again button
+    messageContainer.classList.add('hidden'); // Hide message container
     toggleBtn.classList.add('hidden'); // Hide toggle button
     startBtn.classList.remove('hidden'); // Show Start button
 
