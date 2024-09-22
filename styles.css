@@ -1,97 +1,188 @@
+/* General Styles */
 body {
     font-family: 'Arial', sans-serif;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
-    background: #000; /* Black background */
+    background: #000;
+}
+
+.timer {
+    color: black;
+    font-size: 1.5rem;
+    margin-bottom: 40px;
+    background-color: yellow;
+    border-radius: 10px;
+    padding: 20px;
+    border: white solid 3px;
 }
 
 .game-board {
     display: grid;
-    grid-template-columns: repeat(6, 120px); /* Adjusted number of columns */
-    grid-gap: 15px;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); /* Responsive columns */
+    grid-gap: 10px;
     justify-content: center;
+    width: 90vw; /* Ensure the board resizes on small screens */
+    max-width: 600px; /* Limit width for large screens */
+    margin-bottom: 20px; /* Space between game board and buttons */
+    border: yellow dotted 4px;
+    border-radius: 10px;
+    padding: 30px;
 }
 
+/* Card Styles */
 .card {
-    width: 120px;
-    height: 120px;
-    background: #fff; /* White background for the cards */
+    width: 100%;
+    height: 100px;
+    background: #fff;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 2.5rem; /* Larger font size */
-    color: #333; /* Dark gray for text */
+    font-size: 2rem;
+    color: #333;
     cursor: pointer;
     border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Slightly darker shadow */
-    transition: transform 0.6s, background 0.3s, box-shadow 0.3s;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
     position: relative;
-    perspective: 1000px; /* Added for 3D flipping effect */
+    perspective: 1000px;
+    transition: transform 0.6s ease; /* Smooth transition for flipping */
 }
 
-.card.flipped,
-.card.correct {
-    transform: rotateY(180deg); /* Rotate card when flipped or correctly matched */
+/* Front and Back of Cards */
+.card-front,
+.card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 12px;
+}
+
+.card-front {
+    background-color: white;
+}
+
+.card-front:hover{
+    background-color: aquamarine;
+}
+
+.card-back {
+    background-color: #333;
+    color: white;
+    transform: rotateY(180deg);
+}
+
+.card.flipped .card-front {
+    transform: rotateY(180deg); /* Flip front to hide it */
+}
+
+.card.flipped .card-back {
+    transform: rotateY(0deg); /* Show back when flipped */
 }
 
 .card.correct {
-    background: #444; /* Slightly lighter gray for correct matches */
-    color: #fff; /* White text for correct matches */
+    background: lightgray; /* Correct matches */
+    color: #fff;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
-    transform: rotateY(360deg); /* Full rotation for correct matches */
+    transform: rotateY(360deg); /* Full rotation when matched */
 }
 
 .card.incorrect {
     background: #222; /* Darker gray for incorrect matches */
-    color: #fff; /* White text for incorrect matches */
+    color: #fff;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
     transform: scale(1.1); /* Slightly larger scaling for incorrect matches */
 }
 
-/* Card Front and Back */
-.card-inner {
-    width: 100%;
-    height: 100%;
-    transition: transform 0.6s;
-    transform-style: preserve-3d; /* Preserve 3D effect */
-}
-
-.card .card-front,
-.card .card-back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 12px;
-    backface-visibility: hidden; /* Hide back face when showing front */
-}
-
-.card .card-front {
-    background: #fff; /* White front */
-}
-
-.card .card-back {
-    background: #333; /* Dark gray back */
-    color: #fff; /* White text on back */
-    transform: rotateY(180deg); /* Rotate back face to be hidden initially */
-}
-
-/* Hover Effect for Default Cards */
 .card:hover {
-    background: #e0e0e0; /* Light gray for hover effect */
+    background: pink; /* Light pink for hover effect */
     transform: scale(1.05); /* Slightly larger scaling effect */
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
 }
 
-.card.flipped img,
-.card.correct img {
-    opacity: 1; /* Ensure images are visible */
+/* Controls Section */
+.controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap; /* Stack buttons on smaller screens */
 }
 
-.card:not(.flipped) img {
-    opacity: 0;
-    transition: opacity 0.3s;
+button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    border: none;
+    background-color: hsla(134, 100%, 51%, 0.75);
+    color: white;
+    border-radius: 5px;
 }
 
+button:disabled {
+    background-color: #888; /* Disabled buttons are grayed out */
+}
+
+button:hover:not(:disabled) {
+    background-color: rgba(57, 156, 35, 0.882);
+}
+
+#tryAgainBtn {
+    background-color: rgb(205, 94, 50);
+}
+
+/* Hide elements by default */
+.hidden {
+    display: none;
+}
+
+/* Responsive Adjustments for Smaller Screens */
+@media (max-width: 768px) {
+    .timer {
+        font-size: 1.2rem;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+
+    .game-board {
+        grid-template-columns: repeat(auto-fit, minmax(60px, 1fr)); /* Smaller cards on mobile */
+        width: 95vw; /* Wider board on small screens */
+        max-width: 100%; /* No maximum width on mobile */
+        padding: 20px;
+    }
+
+    .card {
+        height: 80px; /* Smaller height for mobile */
+        font-size: 1.5rem; /* Smaller font size for emojis on mobile */
+    }
+
+    button {
+        font-size: 0.9rem; /* Slightly smaller buttons on mobile */
+        padding: 8px 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .timer {
+        font-size: 1rem; /* Smaller font size for mobile */
+        padding: 10px;
+    }
+
+    .game-board {
+        grid-template-columns: repeat(auto-fit, minmax(50px, 1fr)); /* Even smaller cards */
+    }
+
+    .card {
+        height: 60px; /* Smaller height */
+        font-size: 1.2rem; /* Even smaller font for emojis */
+    }
+
+    button {
+        font-size: 0.8rem; /* Smaller buttons */
+        padding: 6px 12px;
+    }
+}
